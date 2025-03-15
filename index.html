@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<!-- pola -->
+    <input type="number" id="w1">
+    <input type="nmber" id="w2">
+    <input type="number" id="w3">
+    <input type="number" id="w4">
+
+<!-- przyciski -->
+    <!-- <button id="e1">Przelicz</button> -->
+    <button id="e2">Dodaj pole</button>
+ 
+    <main>
+
+<!-- przypisanie do stalych -->
+<script type="text/javascript">
+    const input1 = document.querySelector('#w1')
+    const input2 = document.querySelector('#w2')
+    const input3 = document.querySelector('#w3')
+    const input4 = document.querySelector('#w4')
+ 
+// const button1=document.querySelector('#e1')
+const button2=document.querySelector('#e2')
+  
+const mainContainer = document.querySelector('main')
+
+
+// nasluchiwanie i funkcje
+ 
+//dodawanie buttona
+button2.addEventListener('click', () =>
+{
+    let nowyInput = document.createElement("input");
+ nowyInput.type="text";
+ mainContainer.appendChild(nowyInput);
+ 
+})
+
+//dynamiczna zmiana wartosci pól
+
+input1.addEventListener('input', () => {
+
+    const input1Value = +input1.value
+    const input2Value = +input2.value
+    const input3Value = +input3.value
+    const input4Value = +input4.value
+    const sumVal = input1Value + input2Value + input3Value + input4Value
+    const minVal = Math.min(input4Value,input3Value,input2Value,input1Value)
+    const maxVal = Math.max(input4Value,input3Value,input2Value,input1Value)
+    const avg = sumVal / 4
+ 
+   
+ 
+   
+    mainContainer.textContent = `Średnia: ${avg}, Minimalna wartość: ${minVal}, Maksymalna wartość: ${maxVal}`
+   
+})
+
+input2.addEventListener('input', () => {
+
+const input1Value = +input1.value
+const input2Value = +input2.value
+const input3Value = +input3.value
+const input4Value = +input4.value
+const sumVal = input1Value + input2Value + input3Value + input4Value
+const minVal = Math.min(input4Value,input3Value,input2Value,input1Value)
+const maxVal = Math.max(input4Value,input3Value,input2Value,input1Value)
+const avg = sumVal / 4
+
+
+
+
+mainContainer.textContent = `Średnia: ${avg}, Minimalna wartość: ${minVal}, Maksymalna wartość: ${maxVal}`
+
+})
+
+input3.addEventListener('input', () => {
+
+const input1Value = +input1.value
+const input2Value = +input2.value
+const input3Value = +input3.value
+const input4Value = +input4.value
+const sumVal = input1Value + input2Value + input3Value + input4Value
+const minVal = Math.min(input4Value,input3Value,input2Value,input1Value)
+const maxVal = Math.max(input4Value,input3Value,input2Value,input1Value)
+const avg = sumVal / 4
+
+
+
+
+mainContainer.textContent = `Średnia: ${avg}, Minimalna wartość: ${minVal}, Maksymalna wartość: ${maxVal}`
+
+})
+
+
+input4.addEventListener('input', () => {
+
+const input1Value = +input1.value
+const input2Value = +input2.value
+const input3Value = +input3.value
+const input4Value = +input4.value
+const sumVal = input1Value + input2Value + input3Value + input4Value
+const minVal = Math.min(input4Value,input3Value,input2Value,input1Value)
+const maxVal = Math.max(input4Value,input3Value,input2Value,input1Value)
+const avg = sumVal / 4
+
+
+
+
+mainContainer.textContent = `Średnia: ${avg}, Minimalna wartość: ${minVal}, Maksymalna wartość: ${maxVal}`
+
+})
+ 
+ 
+ 
+// button1.addEventListener('click', () =>
+// {
+//   const input1Value = +input1.value
+//     const input2Value = +input2.value
+//     const input3Value = +input3.value
+//     const input4Value = +input4.value
+//     const sumVal = input1Value + input2Value + input3Value + input4Value
+//     const minVal = Math.min(input4Value,input3Value,input2Value,input1Value)
+//     const maxVal = Math.max(input4Value,input3Value,input2Value,input1Value)
+//     const avg = sumVal / 4
+ 
+   
+ 
+   
+//     mainContainer.textContent = `Średnia: ${avg}, Minimalna wartość: ${minVal}, Maksymalna wartość: ${maxVal}`
+   
+ 
+// }
+// )
+ 
+   
+ 
+   
+</script>
+    </main>
+</body>
+</html>
