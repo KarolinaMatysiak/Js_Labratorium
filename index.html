@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Slider</title>
+</head>
+<body>
+ 
+        <section class="slider">
+         
+            <div id="slider-inner">
+<img src="https://picsum.photos/id/237/200/300" alt="slide 1"></img>
+<img src="https://picsum.photos/id/230/200/300" alt="slide 2"></img>
+<img src="https://picsum.photos/id/231/200/300" alt="slide 3"></img>
+<img src="https://picsum.photos/id/232/200/300" alt="slide 4"></img>
+</div>
+
+</section>
+
+
+
+ 
+<script type="text/javascript">
+
+let position = 0
+
+const step = () => {
+if (position <1300)
+{
+    const slider = document.querySelector('#slider-inner');
+    slider.style.transform = `translate(${position}px,0px)`;
+    position++;
+    requestAnimationFrame(step);
+}
+        
+}
+
+requestAnimationFrame(
+    () => {
+        const slider = document.querySelector('#slider-inner')
+        slider.style.transform = `translate(${position}px,0px)`
+        position++
+        requestAnimationFrame(step)
+    })
+
+//     const slider = document.querySelector(".slider")
+// // const img = document.createElement("img")
+// // img.src = "https://picsum.photos/id/232/200/300"
+// // img.alt = "slide 1"
+// // slider.appendChild(img)
+ 
+ 
+ 
+// //przesuniecie
+ 
+// //request animation frame do animacji zamiast timeout/interval
+ 
+// let position =0;
+ 
+// function animateSlider()
+// {
+//     slider.style.transform = "translateX("+ position + "px)";
+ 
+//     position +=1;
+//    // console.log(position);
+//     requestAnimationFrame(animateSlider)
+// }
+ 
+// animateSlider();
+ 
+    </script>
+</body>
+</html>
+ 
