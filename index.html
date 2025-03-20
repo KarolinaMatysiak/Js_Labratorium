@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drumkit</title>
+</head>
+<body>
+    <audio src="./clap.wav" controls data-key="a" data-volume="40" id="s1"></audio>
+    <audio src="./kick.wav" controls data-key="s" id="s2"></audio>
+    <audio src="./hihat.wav" controls data-key="d" id="s3"></audio>
+    <script src="main.js"></script>
+    <script type="text/javascript">
+        const clapSound = document.querySelector('#s1');
+        const kickSound = document.querySelector('#s2');
+        const hihatSound = document.querySelector('#s3');
+       
+        const sounds = {
+            a: clapSound,
+            s: kickSound,
+            d: hihatSound,
+        }
+        const channel1 = [];
+       
+        addEventListener('keypress',(event)=>{
+            channel1.push({
+                key:event.key,
+                time: Date.now()
+            })
+            play(sounds[event.key]);
+        });
+        function play(sound)
+        {
+            sound.currentTime = 0;
+            sound.play();
+        }
+       
+    </script>
+</body>
+</html>
