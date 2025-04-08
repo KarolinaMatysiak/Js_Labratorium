@@ -1,0 +1,92 @@
+:root {
+  --shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+body {
+  background-image: url(../styles/pictures/hand_painted_neutral_coloured_watercolour_background_1906.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  height: 100vh;
+  padding: 0%;
+  margin: 0%;
+}
+
+.main-container {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-evenly;
+  height: 100%;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  width: 40%;
+}
+
+.form-border {
+  position: sticky;
+  top: 30%;
+  border-radius: 10%;
+  max-height: 35%;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(242, 241, 239, 0.596);
+  box-shadow: var(--shadow);
+  width: 50%;
+}
+
+form {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-element {
+  width: 115%;
+  text-align: center;
+  margin-bottom: 10%;
+  font-size: 14px;
+  font-family: Verdana, sans-serif;
+  min-height: 7%;
+  border-radius: 5px;
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+.form-element:hover{
+  transform: scale(1.02);
+}
+
+textarea {
+  max-height: 30%;
+  font-family: Verdana, sans-serif;
+  resize: vertical;
+}
+
+.form-submit-button {
+  background-color: rgb(195, 168, 147);
+  border: none;
+  color: white;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-block;
+  height: 12%;
+  width: 70%;
+  text-shadow: var(--shadow);
+  font-family: Verdana, sans-serif;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.form-submit-button:hover {
+  background-color: rgb(150, 146, 146);
+  transform: scale(1.05);
+}
+
+.notes-container {
+  width: 40%;
+}
