@@ -11,7 +11,7 @@ export function saveNotesData(note) {
     return;
   }
 
-  notes.push(note);
+  notes.push({...note, id: crypto.randomUUID()});
   localStorage.setItem("notes", JSON.stringify(notes));
 }
 
@@ -29,7 +29,7 @@ function createNoteElement(note) {
   const noteContainer = document.createElement("div");
   const headerElement = createHeaderElement(note);
   const noteContentElement = createNoteContentElement(note);
-  const buttonsContainer = createButtonsElement();
+  const buttonsContainer = createButtonsElement(note);
 
   noteContainer.className = "notes";
   noteContainer.style.backgroundColor = note.noteColor;
@@ -45,9 +45,35 @@ function createNoteElement(note) {
   return noteContainer;
 }
 
-function createButtonsElement() {
-  const deleteBtn = createDeleteButton();
-  const pinBtn = createPinButton();
+
+function createHeaderElement(note) {
+    const noteHeader = document.createElement("div");
+    const noteTitle = document.createElement("h3");
+    const noteTags = document.createElement("span");
+    
+    noteHeader.className = "note-header";
+    noteTitle.textContent = `${
+        note.noteTitle.charAt(0).toUpperCase() + note.noteTitle.slice(1)
+    }`;
+    noteTags.textContent = `#${note.noteTags.toLowerCase().replace(/ /g, "_")}`;
+    
+    noteHeader.append(noteTitle, noteTags);
+    
+    return noteHeader;
+}
+
+function createNoteContentElement(note) {
+    const noteContent = document.createElement("p");
+    
+    noteContent.className = "notes-content";
+    noteContent.textContent = note.noteContent;
+    
+    return noteContent;
+}
+
+function createButtonsElement(note) {
+  const deleteBtn = createDeleteButton(note);
+  const pinBtn = createPinButton(note);
   const buttonsContainer = document.createElement("div");
 
   buttonsContainer.className = "note-buttons-container";
@@ -57,46 +83,34 @@ function createButtonsElement() {
   return buttonsContainer;
 }
 
-function createHeaderElement(note) {
-  const noteHeader = document.createElement("div");
-  const noteTitle = document.createElement("h3");
-  const noteTags = document.createElement("span");
-
-  noteHeader.className = "note-header";
-  noteTitle.textContent = `${
-    note.noteTitle.charAt(0).toUpperCase() + note.noteTitle.slice(1)
-  }`;
-  noteTags.textContent = `#${note.noteTags.toLowerCase().replace(/ /g, "_")}`;
-
-  noteHeader.append(noteTitle, noteTags);
-
-  return noteHeader;
-}
-
-function createNoteContentElement(note) {
-  const noteContent = document.createElement("p");
-
-  noteContent.className = "notes-content";
-  noteContent.textContent = note.noteContent;
-
-  return noteContent;
-}
-
-function createDeleteButton() {
+function createDeleteButton(note) {
   const deleteBtn = document.createElement("button");
   deleteBtn.className = "note-buttons";
+  deleteBtn.id = note.id;
 
   const deleteBtnImg = document.createElement("img");
   deleteBtnImg.src = "../styles/assets/trash_607318.png";
   deleteBtnImg.alt = "delete";
   deleteBtnImg.width = 11;
+  
 
   deleteBtn.appendChild(deleteBtnImg);
+
+  deleteBtn.addEventListener('click', function(event) {
+    const index = notes.findIndex(note => note.id === this.id);
+    if (index === -1){
+        return;
+    }
+
+    notes.splice(index, 1);
+    localStorage.setItem("notes", JSON.stringify(notes));
+    location.reload();
+  })
 
   return deleteBtn;
 }
 
-function createPinButton() {
+function createPinButton(note) {
   const pinBtn = document.createElement("button");
   pinBtn.className = "note-buttons";
 
@@ -106,6 +120,8 @@ function createPinButton() {
   pinBtnImg.width = 11;
 
   pinBtn.appendChild(pinBtnImg);
+
+  
 
   return pinBtn;
 }
@@ -120,6 +136,8 @@ function registerNoteClickEvent(noteElement) {
     noteElement.classList.toggle("expanded");
   });
 }
+
+
 
 // export const getNotesFromStorage = () => JSON.parse(localStorage.getItem("notes")) || [];
 
