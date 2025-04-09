@@ -97,6 +97,7 @@ justify-content: start;
 }
 
 .notes {
+  position: relative;
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -119,7 +120,8 @@ justify-content: start;
   width: 80%;
   height: 30%;
   resize: none;
-  overflow-y: hidden;
+  overflow: hidden;
+  word-wrap: break-word; 
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -156,4 +158,28 @@ justify-content: start;
   color: #555;
   opacity: 0.8;
   margin-top: 0.3em;
+}
+
+.note-buttons-container{
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  display: flex;
+  gap: 0.3em;
+}
+
+.note-buttons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border-color: transparent;
+  border-style: outset;
+}
+
+.note-buttons:hover{
+  transform: scale(1.02);
+  background-color: rgb(159, 157, 157);
+  cursor: pointer;
+
 }

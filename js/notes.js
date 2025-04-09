@@ -20,29 +20,56 @@ export function displayNotes() {
   notesContainer.innerHTML = "";
 
   notes.forEach((note) => {
-    const noteElement = document.createElement("div");
+    const container = document.createElement("div");
     const noteHeader = document.createElement("div");
+    const buttonsContainer = document.createElement("div");
     const noteTitle = document.createElement("h3");
     const noteContent = document.createElement("p");
     const noteTags = document.createElement("span");
+    const deleteBtn = document.createElement("button");
+    const pinBtn = document.createElement("button");
+    const pinBtnImg = document.createElement("img");
+    const deleteBtnImg = document.createElement("img");
 
-    noteElement.className = "notes";
+    pinBtnImg.src = "../styles/assets/pin_12060883.png"; 
+    pinBtnImg.alt = "pin";
+    pinBtnImg.width=11;
+    deleteBtnImg.src = "../styles/assets/trash_607318.png"; 
+    deleteBtnImg.alt = "delete";
+    deleteBtnImg.width=11;
+
+    container.className = "notes";
     noteContent.className = "notes-content";
     noteHeader.className = "note-header";
-    noteElement.style.backgroundColor = note.noteColor;
+    deleteBtn.className="note-buttons"
+    pinBtn.className="note-buttons"
+    buttonsContainer.className = "note-buttons-container";
+    container.style.backgroundColor = note.noteColor;
 
-    noteTitle.textContent = `${note.noteTitle.charAt(0).toUpperCase() + note.noteTitle.slice(1)}`;
+    noteTitle.textContent = `${
+      note.noteTitle.charAt(0).toUpperCase() + note.noteTitle.slice(1)
+    }`;
     noteContent.textContent = note.noteContent;
-    noteTags.textContent =  `#${note.noteTags.replace(/ /g, '_')}`;
+    noteTags.textContent = `#${note.noteTags.toLowerCase().replace(/ /g, "_")}`;
+
+    deleteBtn.appendChild(deleteBtnImg);
+
+    pinBtn.appendChild(pinBtnImg);
 
     noteHeader.append(noteTitle, noteTags);
 
-    noteElement.replaceChildren(noteHeader, noteContent);
+    buttonsContainer.append(pinBtn, deleteBtn);
+    
+    container.replaceChildren(buttonsContainer, noteHeader, noteContent);
 
-    notesContainer.appendChild(noteElement);
+    notesContainer.appendChild(container);
 
-    registerNoteClickEvent(noteElement);
+    registerNoteClickEvent(container);
   });
+}
+
+function registerNoteEvents(){
+
 }
 
 function registerNoteClickEvent(noteElement) {
@@ -50,13 +77,24 @@ function registerNoteClickEvent(noteElement) {
     const content = noteElement.querySelector(".notes-content");
 
     if (noteElement.classList.contains("expanded")) {
-        content.scrollTop = 0; 
-      }
+      content.scrollTop = 0;
+    }
     noteElement.classList.toggle("expanded");
   });
 }
 
 
+
+function deleteNote(){
+  // Usuwamy notatkę z tablicy notes na podstawie indeksu
+  notes.splice(index, 1);
+
+  // Zapisujemy zaktualizowaną tablicę notatek w localStorage
+  localStorage.setItem("notes", JSON.stringify(notes));
+
+  // Ponownie renderujemy notatki
+  displayNotes();
+}
 
 // export const getNotesFromStorage = () => JSON.parse(localStorage.getItem("notes")) || [];
 
