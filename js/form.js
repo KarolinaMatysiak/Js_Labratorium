@@ -1,7 +1,7 @@
-import {saveNotes} from './notes.js'
+import {saveNotesData} from './notes.js'
 
 
-export function registerNoteFormEventListener(){
+export function registerNoteFormSubmitEventListener(){
     
     const form = document.getElementById("noteForm");
     
@@ -15,6 +15,6 @@ function handleNoteFormSubmitData(event) {
     const formData = new FormData(event.target)
     const formProps = Object.fromEntries(formData);
     
-    saveNotes(formProps);
+    saveNotesData(formProps);
 }
 
