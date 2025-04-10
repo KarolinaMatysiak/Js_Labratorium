@@ -1,4 +1,5 @@
 let notes = [];
+let notesFilterText = "";
 
 //akcja ratunkowa na odswiezenie strony
 const storedNotes = localStorage.getItem("notes");
@@ -23,7 +24,8 @@ export function displayNotes() {
   const notesContainer = document.getElementById("notesContainer");
   notesContainer.innerHTML = "";
 
-  notes.forEach((note) => {
+  const filteredNotes = filterNotes(notes, notesFilterText);
+  filteredNotes.forEach((note) => {
     const noteContainer = createNoteElement(note);
     notesContainer.appendChild(noteContainer);
   });
@@ -163,4 +165,38 @@ function registerNoteClickEvent(noteElement) {
     }
     noteElement.classList.toggle("expandedText");
   });
+}
+
+export function registerSearchOnChangeEvent() {
+  const searchBar = document.getElementById("searchBar");
+
+  searchBar.addEventListener("input", (event) => {
+    notesFilterText = event.target.value;
+    displayNotes();
+  });
+}
+
+function filterNotes(notes, filterText) {
+  if (!filterText) {
+    return notes;
+  }
+
+  return notes.filter(
+    (note) =>
+      isTitleMatching(note, filterText) ||
+      isTagMatching(note, filterText) ||
+      isContentMatching(note, filterText)
+  );
+}
+
+function isTitleMatching(note, filterText) {
+  return note.noteTitle.toLowerCase().includes(filterText.toLowerCase());
+}
+
+function isTagMatching(note, filterText) {
+  return note.noteTags.toLowerCase().includes(filterText.toLowerCase());
+}
+
+function isContentMatching(note, filterText) {
+  return note.noteContent.toLowerCase().includes(filterText.toLowerCase());
 }
