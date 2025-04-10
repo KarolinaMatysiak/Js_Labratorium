@@ -7,43 +7,146 @@
     <title>Slider</title>
 </head>
 <body>
- 
+    <div style="display: flex; align-items: center;">
+        <button onclick="onLeftButtonClick()" id="button-left">
+            Left
+        </button>
+
         <section class="slider">
-         
-            <div id="slider-inner">
-<img src="https://picsum.photos/id/237/200/300" alt="slide 1"></img>
-<img src="https://picsum.photos/id/230/200/300" alt="slide 2"></img>
-<img src="https://picsum.photos/id/231/200/300" alt="slide 3"></img>
-<img src="https://picsum.photos/id/232/200/300" alt="slide 4"></img>
-</div>
+            <div id="slider-inner"></div>
+        </section>
+    
+        <button onclick="onRightButtonClick()" id="button-right">
+            Right
+        </button>
+    </div>
+    
+    
 
-</section>
+    <div style="display: flex; justify-content: center; padding-top: 50px;">
+        <button>
+            dots
+        </button>
+    </div>
 
+    <script type="text/javascript">
 
+    // Powinno byc nieparzyste zeby ladnie wysrodkowac
+    const visibleImagesCount = 3;
 
- 
-<script type="text/javascript">
+    let images = [
+        "https://picsum.photos/id/237/200/300",
+        "https://picsum.photos/id/230/200/300",
+        "https://picsum.photos/id/231/200/300",
+        "https://picsum.photos/id/232/200/300"];
 
-let position = 0
+        const multipliedImages = [];
+        for (let i =0 ; i< 100; i ++) {
+            multipliedImages.push(...images);
+        }
 
-const step = () => {
-if (position <1300)
-{
+    images = multipliedImages.map(imageUrl => {
+        const image = document.createElement("img");
+        image.className = "slider-element"
+        image.src = imageUrl;
+        return image;
+    });
+
+    
     const slider = document.querySelector('#slider-inner');
-    slider.style.transform = `translate(${position}px,0px)`;
-    position++;
-    requestAnimationFrame(step);
-}
-        
-}
+    const buttonLeft = document.querySelector('#button-left');
+    const buttonRight = document.querySelector('#button-right');
 
-requestAnimationFrame(
-    () => {
+    slider.replaceChildren(...images)
+
+    const buttonLeftRect = buttonLeft.getBoundingClientRect();
+    const sliderImagesStart = buttonLeftRect.x + buttonLeftRect.width;
+    const sliderImagesEnd = buttonRight.getBoundingClientRect().x;
+
+
+    let offset = 0;
+    
+let position = 0;
+    let windowSize = 2560;
+
+function onLeftButtonClick() {
+    if (offset <= 0) {
+        return;
+    }
+
+    offset--;
+    
+    const newTransform = -offset * (images[0].width + 20); // 20 is the margin between images
+
+    function move() {
+        position += 5;
+        if (position >= newTransform) {
+            return;
+        }
+
         const slider = document.querySelector('#slider-inner')
         slider.style.transform = `translate(${position}px,0px)`
-        position++
-        requestAnimationFrame(step)
-    })
+        requestAnimationFrame(move)
+    }
+
+    requestAnimationFrame(move)
+}
+
+function onRightButtonClick() {
+    if (offset >= images.length - visibleImagesCount) {
+        return;
+    }
+
+    offset++;
+        
+
+    const newTransform = -offset * (images[0].width + 20); // 20 is the margin between images
+
+    function move() {
+        position -= 5;
+        if (position <= newTransform) {
+            return;
+        }
+
+        const slider = document.querySelector('#slider-inner')
+        slider.style.transform = `translate(${position}px,0px)`
+        requestAnimationFrame(move)
+    }
+
+    requestAnimationFrame(move)
+}
+
+// Rozwaizanie z CSS
+// function updateSlider() {
+//     const newTransform = -offset * (images[0].width + 20); // 20 is the margin between images
+//     slider.style.transform = `translateX(${newTransform}px)`;
+// }
+
+
+
+// const step = () => {
+//     if (position < windowSize)
+//     {
+//         const slider = document.querySelector('#slider-inner');
+//         slider.style.transform = `translate(${position}px,0px)`;
+//         position++;
+//         requestAnimationFrame(step);
+//     }     
+// }
+
+// addEventListener("resize", (event) => {
+//     windowSize = window.innerWidth;
+// });
+
+// requestAnimationFrame(
+//     () => {
+
+
+//         const slider = document.querySelector('#slider-inner')
+//         slider.style.transform = `translate(${position}px,0px)`
+//         position++
+//         requestAnimationFrame(step)
+//     })
 
 //     const slider = document.querySelector(".slider")
 // // const img = document.createElement("img")
@@ -53,22 +156,10 @@ requestAnimationFrame(
  
  
  
-// //przesuniecie
+// //przeuniecie
  
 // //request animation frame do animacji zamiast timeout/interval
- 
-// let position =0;
- 
-// function animateSlider()
-// {
-//     slider.style.transform = "translateX("+ position + "px)";
- 
-//     position +=1;
-//    // console.log(position);
-//     requestAnimationFrame(animateSlider)
-// }
- 
-// animateSlider();
+
  
     </script>
 </body>
