@@ -11,7 +11,7 @@ export function saveNotesData(note) {
     return;
   }
 
-  notes.push({ ...note, id: crypto.randomUUID(), pinned: false });
+  notes.push({ ...note, id: crypto.randomUUID(), pinned: note.pinned ?? false});
   localStorage.setItem("notes", JSON.stringify(notes));
 }
 
@@ -113,8 +113,12 @@ function deleteNote(event) {
 
 function createPinButton(note) {
   const pinBtn = document.createElement("button");
-  pinBtn.className = "note-buttons";
   pinBtn.id = note.id;
+  pinBtn.className = "note-buttons";
+
+  if (note.pinned) {
+    pinBtn.classList.add("pinned");
+  }
 
   const pinBtnImg = document.createElement("img");
   pinBtnImg.src = "../styles/assets/pin_12060883.png";
@@ -159,74 +163,3 @@ function registerNoteClickEvent(noteElement) {
   });
 }
 
-// export const getNotesFromStorage = () => JSON.parse(localStorage.getItem("notes")) || [];
-
-// // Usuwanie notatki
-// export const deleteNote = (index) => {
-//     let notes = getNotes();
-//     notes.splice(index, 1);
-//     saveNotes(notes);
-// };
-
-// // Dodawanie nowej notatki
-// export const addNote = (newNote) => {
-//     let notes = getNotes();
-//     if (newNote.pinned) {
-//         notes.unshift(newNote); // Dodaj na początek, jeśli przypięta
-//     } else {
-//         notes.push(newNote);    // Dodaj na koniec, jeśli nieprzypięta
-//     }
-//     saveNotes(notes);
-// };
-
-// export const pinNote = (index) => {
-//     let notes = getNotes();  // Pobierz wszystkie notatki
-//     const note = notes[index]; // Zidentyfikuj notatkę według indeksu
-//     note.pinned = true;  // Zmieniamy status na przypięty
-//     saveNotes(notes);  // Zapisujemy zaktualizowaną tablicę notatek w localStorage
-//     renderNotes();  // Renderujemy notatki ponownie, żeby pokazać zmiany
-// };
-
-// // Renderowanie notatek
-// export const renderNotes = () => {
-//     const notesContainer = document.getElementById("notesContainer");
-//     notesContainer.innerHTML = ""; // Wyczyść zawartość
-
-//     let notes = getNotes();
-//     // Sortujemy notatki alfabetycznie (np. według tytułu)
-//     notes.sort((a, b) => a.title.localeCompare(b.title));
-
-//     notes.forEach((note, index) => {
-//         const noteElement = document.createElement("div");
-//         noteElement.classList.add("note");
-//         if (note.pinned) {
-//             noteElement.classList.add("pinned");  // Wizualne przypięcie
-//         }
-//         noteElement.style.backgroundColor = note.color;
-//         noteElement.innerHTML = `
-//             <h3>${note.title}</h3>
-//             <p>${note.content}</p>
-//             <small>${new Date(note.createdDate).toLocaleString()}</small>
-//             <button class="delete-btn" data-index="${index}">Usuń</button>
-//             <button class="pin-btn" data-index="${index}">Przypnij</button> <!-- Przycisk przypinania -->
-//         `;
-//         notesContainer.appendChild(noteElement);
-//     });
-
-//     // Event listener do usuwania notatek
-//     document.querySelectorAll(".delete-btn").forEach(button => {
-//         button.addEventListener("click", function () {
-//             const index = this.getAttribute("data-index");
-//             deleteNote(index);
-//             renderNotes();  // Po usunięciu notatki ponownie renderujemy
-//         });
-//     });
-
-//     // Event listener do przypinania notatek
-//     document.querySelectorAll(".pin-btn").forEach(button => {
-//         button.addEventListener("click", function () {
-//             const index = this.getAttribute("data-index");
-//             pinNote(index); // Wywołanie funkcji pinNote
-//         });
-//     });
-// };
