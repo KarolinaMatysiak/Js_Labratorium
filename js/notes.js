@@ -11,7 +11,11 @@ export function saveNotesData(note) {
     return;
   }
 
-  notes.push({ ...note, id: crypto.randomUUID(), pinned: note.pinned ?? false});
+  notes.push({
+    ...note,
+    id: crypto.randomUUID(),
+    pinned: note.pinned ?? false,
+  });
   localStorage.setItem("notes", JSON.stringify(notes));
 }
 
@@ -51,9 +55,7 @@ function createHeaderElement(note) {
   const noteTags = document.createElement("span");
 
   noteHeader.className = "note-header";
-  noteTitle.textContent = `${
-    note.noteTitle.charAt(0).toUpperCase() + note.noteTitle.slice(1)
-  }`;
+  noteTitle.textContent = note.noteTitle.toUpperCase();
   noteTags.textContent = `#${note.noteTags.toLowerCase().replace(/ /g, "_")}`;
 
   noteHeader.append(noteTitle, noteTags);
@@ -108,7 +110,7 @@ function deleteNote(event) {
 
   notes.splice(index, 1);
   localStorage.setItem("notes", JSON.stringify(notes));
-  displayNotes()
+  displayNotes();
 }
 
 function createPinButton(note) {
@@ -156,10 +158,9 @@ function registerNoteClickEvent(noteElement) {
   noteElement.addEventListener("click", () => {
     const content = noteElement.querySelector(".notes-content");
 
-    if (noteElement.classList.contains("expanded")) {
+    if (noteElement.classList.contains("expandedText")) {
       content.scrollTop = 0;
     }
-    noteElement.classList.toggle("expanded");
+    noteElement.classList.toggle("expandedText");
   });
 }
-
