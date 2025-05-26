@@ -162,7 +162,7 @@ function createEditButton(note) {
   editBtn.className = "note-buttons";
 
   const editBtnImg = document.createElement("img");
-  editBtnImg.src = "../styles/assets/edit.png";
+  editBtnImg.src = "../styles/assets/pencil.png";
   editBtnImg.alt = "edit";
   editBtnImg.width = 11;
   editBtn.appendChild(editBtnImg);
