@@ -77,11 +77,12 @@ function createNoteContentElement(note) {
 function createButtonsElement(note) {
   const deleteBtn = createDeleteButton(note);
   const pinBtn = createPinButton(note);
+  const editBtn = createEditButton(note);
   const buttonsContainer = document.createElement("div");
 
   buttonsContainer.className = "note-buttons-container";
 
-  buttonsContainer.append(pinBtn, deleteBtn);
+  buttonsContainer.append(pinBtn, editBtn, deleteBtn);
 
   return buttonsContainer;
 }
@@ -153,6 +154,94 @@ function pinNoteToTop(event) {
 
   localStorage.setItem("notes", JSON.stringify(notes));
 
+  displayNotes();
+}
+
+function createEditButton(note) {
+  const editBtn = document.createElement("button");
+  editBtn.className = "note-buttons";
+
+  const editBtnImg = document.createElement("img");
+  editBtnImg.src = "../styles/assets/edit.png";
+  editBtnImg.alt = "edit";
+  editBtnImg.width = 11;
+  editBtn.appendChild(editBtnImg);
+
+  editBtn.addEventListener("click", function(event) {
+    event.stopPropagation();
+    enableEditMode(note);
+  });
+
+  return editBtn;
+}
+
+function enableEditMode(note) {
+  const noteElement = document.getElementById(note.id).closest('.notes');
+  
+  
+  const existingForm = noteElement.querySelector('.edit-form');
+  if (existingForm) {
+    return; 
+  }
+  
+  const titleElement = noteElement.querySelector('h3');
+  const contentElement = noteElement.querySelector('.notes-content');
+  
+  const editForm = document.createElement('div');
+  editForm.className = 'edit-form';
+  
+  const titleInput = document.createElement('input');
+  titleInput.value = note.noteTitle;
+  titleInput.className = 'edit-title';
+  
+  const contentInput = document.createElement('textarea');
+  contentInput.value = note.noteContent;
+  contentInput.className = 'edit-content';
+  
+  const buttonsContainer = document.createElement('div');
+  buttonsContainer.className = 'buttons-container';
+  
+  const saveButton = document.createElement('button');
+  saveButton.textContent = 'Save';
+  saveButton.className = 'edit-save-btn';
+  
+  const cancelButton = document.createElement('button');
+  cancelButton.textContent = 'Cancel';
+  cancelButton.className = 'edit-cancel-btn';
+  
+  buttonsContainer.append(saveButton, cancelButton);
+  editForm.append(titleInput, contentInput, buttonsContainer);
+  
+  titleElement.style.display = 'none';
+  contentElement.style.display = 'none';
+  
+  contentElement.parentNode.insertBefore(editForm, contentElement);
+  
+  saveButton.addEventListener('click', function() {
+    saveChanges(note, titleInput.value, contentInput.value);
+  });
+  
+  cancelButton.addEventListener('click', function() {
+    cancelEdit();
+  });
+}
+
+function saveChanges(note, newTitle, newContent) {
+  const noteIndex = notes.findIndex(function(n) {
+    return n.id === note.id;
+  });
+  
+  if (noteIndex !== -1) {
+    notes[noteIndex].noteTitle = newTitle;
+    notes[noteIndex].noteContent = newContent;
+    
+    localStorage.setItem("notes", JSON.stringify(notes));
+    
+    displayNotes();
+  }
+}
+
+function cancelEdit() {
   displayNotes();
 }
 

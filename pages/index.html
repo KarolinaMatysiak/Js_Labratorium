@@ -30,12 +30,14 @@
   </head>
   <body>
     <div class="main-container">
-      
+
       <nav class="nav-bar">
+
         <div class="search-bar">
           <input id="searchBar" type="text" placeholder="Wyszukaj..." />
-          <img src="../styles//assets/transparency_1076744.png">
+          <img src="../styles//assets/transparency_1076744.png" />
         </div>
+
       </nav>
 
       <div class="form-and-notes-container">
@@ -58,6 +60,8 @@
                 type="text"
                 placeholder="#Tagi"
                 maxlength="20"
+                pattern="[A-Za-z]+"
+                title="Nie można używać cyfr i znaków specjalnych" 
               />
               <textarea
                 id="noteContent"
