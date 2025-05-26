@@ -1,167 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Slider</title>
 </head>
 <body>
-    <div style="display: flex; align-items: center;">
-        <button onclick="onLeftButtonClick()" id="button-left">
-            Left
-        </button>
-
-        <section class="slider">
-            <div id="slider-inner"></div>
-        </section>
-    
-        <button onclick="onRightButtonClick()" id="button-right">
-            Right
-        </button>
-    </div>
-    
-    
-
-    <div style="display: flex; justify-content: center; padding-top: 50px;">
-        <button>
-            dots
-        </button>
-    </div>
-
-    <script type="text/javascript">
-
-    // Powinno byc nieparzyste zeby ladnie wysrodkowac
-    const visibleImagesCount = 3;
-
-    let images = [
-        "https://picsum.photos/id/237/200/300",
-        "https://picsum.photos/id/230/200/300",
-        "https://picsum.photos/id/231/200/300",
-        "https://picsum.photos/id/232/200/300"];
-
-        const multipliedImages = [];
-        for (let i =0 ; i< 100; i ++) {
-            multipliedImages.push(...images);
-        }
-
-    images = multipliedImages.map(imageUrl => {
-        const image = document.createElement("img");
-        image.className = "slider-element"
-        image.src = imageUrl;
-        return image;
-    });
-
-    
-    const slider = document.querySelector('#slider-inner');
-    const buttonLeft = document.querySelector('#button-left');
-    const buttonRight = document.querySelector('#button-right');
-
-    slider.replaceChildren(...images)
-
-    const buttonLeftRect = buttonLeft.getBoundingClientRect();
-    const sliderImagesStart = buttonLeftRect.x + buttonLeftRect.width;
-    const sliderImagesEnd = buttonRight.getBoundingClientRect().x;
-
-
-    let offset = 0;
-    
-let position = 0;
-    let windowSize = 2560;
-
-function onLeftButtonClick() {
-    if (offset <= 0) {
-        return;
-    }
-
-    offset--;
-    
-    const newTransform = -offset * (images[0].width + 20); // 20 is the margin between images
-
-    function move() {
-        position += 5;
-        if (position >= newTransform) {
-            return;
-        }
-
-        const slider = document.querySelector('#slider-inner')
-        slider.style.transform = `translate(${position}px,0px)`
-        requestAnimationFrame(move)
-    }
-
-    requestAnimationFrame(move)
-}
-
-function onRightButtonClick() {
-    if (offset >= images.length - visibleImagesCount) {
-        return;
-    }
-
-    offset++;
+    <div class="slider-wrapper">
+        <button class="slider-button prev" onclick="prevSlide()">&#10094;</button>
         
+        <div class="slider-container">
+            <div class="slider">
+                <div class="slide">
+                    <img src="https://picsum.photos/id/237/200/300" alt="Slide 1">
+                </div>
+                <div class="slide">
+                    <img src="https://picsum.photos/id/230/200/300" alt="Slide 2">
+                </div>
+                <div class="slide">
+                    <img src="https://picsum.photos/id/231/200/300" alt="Slide 3">
+                </div>
+                <div class="slide">
+                    <img src="https://picsum.photos/id/232/200/300" alt="Slide 4">
+                </div>
+            </div>
 
-    const newTransform = -offset * (images[0].width + 20); // 20 is the margin between images
+            <div class="slider-dots">
+                <button class="dot active" onclick="showSlide(0)"></button>
+                <button class="dot" onclick="showSlide(1)"></button>
+                <button class="dot" onclick="showSlide(2)"></button>
+                <button class="dot" onclick="showSlide(3)"></button>
+            </div>
+        </div>
 
-    function move() {
-        position -= 5;
-        if (position <= newTransform) {
-            return;
-        }
+        <button class="slider-button next" onclick="nextSlide()">&#10095;</button>
+    </div>
 
-        const slider = document.querySelector('#slider-inner')
-        slider.style.transform = `translate(${position}px,0px)`
-        requestAnimationFrame(move)
-    }
-
-    requestAnimationFrame(move)
-}
-
-// Rozwaizanie z CSS
-// function updateSlider() {
-//     const newTransform = -offset * (images[0].width + 20); // 20 is the margin between images
-//     slider.style.transform = `translateX(${newTransform}px)`;
-// }
-
-
-
-// const step = () => {
-//     if (position < windowSize)
-//     {
-//         const slider = document.querySelector('#slider-inner');
-//         slider.style.transform = `translate(${position}px,0px)`;
-//         position++;
-//         requestAnimationFrame(step);
-//     }     
-// }
-
-// addEventListener("resize", (event) => {
-//     windowSize = window.innerWidth;
-// });
-
-// requestAnimationFrame(
-//     () => {
-
-
-//         const slider = document.querySelector('#slider-inner')
-//         slider.style.transform = `translate(${position}px,0px)`
-//         position++
-//         requestAnimationFrame(step)
-//     })
-
-//     const slider = document.querySelector(".slider")
-// // const img = document.createElement("img")
-// // img.src = "https://picsum.photos/id/232/200/300"
-// // img.alt = "slide 1"
-// // slider.appendChild(img)
- 
- 
- 
-// //przeuniecie
- 
-// //request animation frame do animacji zamiast timeout/interval
-
- 
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
- 
