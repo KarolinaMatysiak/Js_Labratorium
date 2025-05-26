@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 
-
 body {
     display: flex;
     justify-content: center;
@@ -13,13 +12,11 @@ body {
     background-color: #f0f0f0;
 }
 
-
 .slider-wrapper {
     display: flex;
     align-items: center;
     gap: 5px; 
 }
-
 
 .slider-container {
     position: relative;
@@ -28,14 +25,12 @@ body {
     overflow: hidden;
 }
 
-
 .slider {
     display: flex;
     width: 100%;
     height: 100%;
     transition: transform 0.5s ease-in-out;
 }
-
 
 .slide {
     min-width: 100%;
@@ -48,19 +43,58 @@ body {
     object-fit: cover;
 }
 
-
 .slider-button {
     background-color: #333;
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 8px 12px; 
     cursor: pointer;
     border-radius: 3px; 
-    font-size: 16px;
+    font-size: 16px; 
 }
 
 .slider-button:hover {
     background-color: #555;
+}
+
+
+.pause-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pause-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.pause-icon, .play-icon {
+    position: absolute;
+}
+
+
+.pause-button .play-icon {
+    display: none;
+}
+
+
+.pause-button.paused .play-icon {
+    display: block;
+}
+
+.pause-button.paused .pause-icon {
+    display: none;
 }
 
 
