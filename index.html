@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncing Balls Animation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="controls">
+        <div class="control-group">
+            <label for="ballCount">Number of Balls:</label>
+            <input type="range" id="ballCount" min="1" max="200" value="50">
+            <span id="ballCountValue">50</span>
+        </div>
+        <div class="control-group">
+            <label for="connectionDistance">Connection Distance (% of width):</label>
+            <input type="range" id="connectionDistance" min="5" max="50" value="20">
+            <span id="connectionDistanceValue">20%</span>
+        </div>
+        <button id="startBtn">Start</button>
+        <button id="resetBtn">Reset</button>
+    </div>
+    <canvas id="canvas"></canvas>
+    <div id="fpsCounter">FPS: 0</div>
+    <script src="script.js"></script>
+</body>
+</html> 
