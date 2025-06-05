@@ -1,4 +1,4 @@
-const API_KEY = "74b6f9526661ce8c439966d51fe11e73"; 
+const API_KEY = "74b6f9526661ce8c439966d51fe11e73";
 const MAX_SAVED_LOCATIONS = 10;
 
 export async function getWeatherData(cityName) {
@@ -43,7 +43,6 @@ export async function saveCity(cityName){
 export async function getCity(cityName){
     try {
         const citiesFromLocalStorage = JSON.parse(localStorage.getItem('cities') || '[]');
-        
         if(await isCityInLocalStorage(cityName)){
             const city = citiesFromLocalStorage.find(city => 
                 city.name.toLowerCase() === cityName.toLowerCase()
@@ -77,10 +76,7 @@ async function isCityInLocalStorage(cityName){
         city.name.toLowerCase() === cityName.toLowerCase()
     );
     
-    if(existingCity){
-        return true;
-    }
-    return false;
+    return existingCity ? true : false;
 }
 
 export function getSavedLocations() {
@@ -90,7 +86,6 @@ export function getSavedLocations() {
 export function addToSavedLocations(cityInfo) {
     const savedLocations = getSavedLocations();
     
-
     const cityExists = savedLocations.some(loc => 
         loc.cityName.toLowerCase() === cityInfo.cityName.toLowerCase() &&
         loc.countryCode === cityInfo.countryCode
