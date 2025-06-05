@@ -1,139 +1,179 @@
 import { Ball } from "./ball.js"
 import { Hole } from "./hole.js"
 
-export class Game{
-    constructor(){
-        this.canvas = null
-        this.ctx = null
-        this.ball = null
-        this.hole = null
-        this.startTime = null
-        this.endTime = null
-        this.tiltX = 0
-        this.tiltY = 0
-        this.scores = []
+export class Game {
+    constructor() {
+        this.canvas = null;
+        this.context = null;
+        this.ball = null;
+        this.hole = null;
+        this.score = 0;
+        this.isGameFinished = false;
+        this.initialDeviceGamma = null;
+        this.initialDeviceBeta = null;
+        this.scoreDisplay = null;
+        this.scoreHistory = null;
+        this.attemptStartTime = Date.now();
     }
 
-    init(){
-        this.gameCanvasSetup()
-        this.gameObjSetup()
-        this.registerDeviceMoveEventListener()
-        this.startTime = new Date()
-        this.runGameTick()
+    initialize() {
+        this.setupCanvas();
+        this.setupScoreDisplay();
+        this.setupScoreHistory();
+        this.createGameObjects();
+        this.setupDeviceOrientationHandler();
+        this.setupWindowResizeHandler();
+        this.startGameLoop();
     }
 
-    gameCanvasSetup(){
-        const container = document.getElementById('mainContainer')
+    setupCanvas() {
+        const container = document.getElementById('mainContainer');
+        
+        const gameArea = document.createElement('div');
+        gameArea.style.display = 'flex';
+        gameArea.style.alignItems = 'flex-start';
+        gameArea.style.gap = '20px';
 
-        this.canvas = document.createElement("canvas")
-        this.canvas.width = 500
-        this.canvas.height = 500
-        this.ctx = this.canvas.getContext("2d")
-        container.appendChild(this.canvas)
+        this.canvas = document.createElement("canvas");
+        this.canvas.width = Math.min(window.innerWidth, 500);
+        this.canvas.height = Math.min(window.innerHeight, 400);
+        this.canvas.style.border = '3px solid black';
+        this.context = this.canvas.getContext("2d");
+        
+        gameArea.appendChild(this.canvas);
+        container.appendChild(gameArea);
     }
 
-    gameObjSetup() {
-        const ballRadius = 20
-        const ballX = this.getRandom(ballRadius, this.canvas.width - ballRadius)
-        const ballY = this.getRandom(ballRadius, this.canvas.height - ballRadius)
-        this.ball = new Ball(ballX, ballY, ballRadius, "purple")
-
-        const holeRadius = 25;
-        const holeX = this.getRandom(holeRadius, this.canvas.width - holeRadius)
-        const holeY = this.getRandom(holeRadius, this.canvas.height - holeRadius)
-        this.hole = new Hole(holeX, holeY, holeRadius)
+    setupScoreDisplay() {
+        this.scoreDisplay = document.createElement('div');
+        this.scoreDisplay.style.fontSize = '24px';
+        this.scoreDisplay.style.fontFamily = 'Arial';
+        this.scoreDisplay.style.padding = '10px';
+        this.scoreDisplay.style.border = '3px solid black';
+        this.scoreDisplay.style.backgroundColor = 'white';
+        this.updateScoreDisplay();
+        
+        const gameArea = this.canvas.parentElement;
+        gameArea.appendChild(this.scoreDisplay);
     }
 
-    draw(){
-        this.drawBackground();
-        this.hole.draw(this.ctx)
-        this.ball.draw(this.ctx)
+    setupScoreHistory() {
+        this.scoreHistory = document.createElement('div');
+        this.scoreHistory.style.fontSize = '16px';
+        this.scoreHistory.style.fontFamily = 'Arial';
+        this.scoreHistory.style.padding = '10px';
+        this.scoreHistory.style.border = '3px solid black';
+        this.scoreHistory.style.backgroundColor = 'white';
+        this.scoreHistory.style.minWidth = '200px';
+        this.scoreHistory.style.maxHeight = '400px';
+        this.scoreHistory.style.overflowY = 'auto';
+        this.scoreHistory.innerHTML = '<h3 style="margin-top: 0">Score History</h3>';
+        
+        const gameArea = this.canvas.parentElement;
+        gameArea.appendChild(this.scoreHistory);
     }
 
-    // TODO extract to the background class
-    //not finished
-    drawBackground() {
-        const w = this.canvas.width
-        const h = this.canvas.height
-
-        this.ctx.fillStyle = "rgb(243, 207, 198)"
-        this.ctx.fillRect(0, 0, w, h)
-
-        this.ctx.strokeStyle = "rgb(224, 191, 184)"
-        this.ctx.lineWidth = 5
-        this.ctx.strokeRect(0, 0, w, h)
+    updateScoreDisplay() {
+        const currentTime = (Date.now() - this.attemptStartTime) / 1000;
+        this.scoreDisplay.innerHTML = `
+            <div>Score: ${this.score}</div>
+        `;
     }
 
-    // TODO find better name for single game tick - one round of event loop
-    //not finished
-    runGameTick() {
-        this.draw()
-
-        if (this.hole.isBallInHole(this.ball)) {
-            this.endGame()
-        } else {
-            requestAnimationFrame(() => this.runGameTick())
-        }
+    addScoreRecord(timeElapsed) {
+        const recordElement = document.createElement('div');
+        recordElement.style.marginBottom = '10px';
+        recordElement.style.padding = '5px';
+        recordElement.style.backgroundColor = '#f0f0f0';
+        recordElement.style.borderRadius = '5px';
+        
+        const seconds = (timeElapsed / 1000).toFixed(2);
+        recordElement.innerHTML = `
+            <div>Score ${this.score}: ${seconds}s</div>
+        `;
+        
+        this.scoreHistory.appendChild(recordElement);
+        this.scoreHistory.scrollTop = this.scoreHistory.scrollHeight;
     }
 
+    createGameObjects() {
+        const ballRadius = 35;
+        this.ball = new Ball(0, 0, ballRadius, "blue");
+        this.ball.resetToRandomPosition(this.canvas.width, this.canvas.height);
 
-
-    registerDeviceMoveEventListener(){
-        window.addEventListener('deviceorientation', (e) => {
-            const tiltX  = e.gamma || 0
-            const tiltY = e.beta || 0 
-            const tiltZ = e.alpha || 0     
-
-            this.ball.recalculateY(tiltY, this.canvas.height)
-            this.ball.recalculateX(tiltX,tiltZ, this.canvas.width)
-        })
+        const holeRadius = 60;
+        this.hole = new Hole(0, 0, holeRadius);
+        this.placeHoleRandomly();
+        this.attemptStartTime = Date.now();
     }
 
- 
+    placeHoleRandomly() {
+        this.hole.x = Math.random() * (this.canvas.width - 2 * this.hole.radius) + this.hole.radius;
+        this.hole.y = Math.random() * (this.canvas.height - 2 * this.hole.radius) + this.hole.radius;
+    }
 
-    endGame() {
-        this.endTime = new Date();
-        const timeTaken = ((this.endTime - this.startTime) / 1000).toFixed(2);
-    
-        this.scores.push(timeTaken);
-    
+    setupDeviceOrientationHandler() {
+        window.addEventListener('deviceorientation', (event) => {
+            if (this.initialDeviceGamma === null && this.initialDeviceBeta === null) {
+                this.initialDeviceGamma = event.gamma;
+                this.initialDeviceBeta = event.beta;
+                return;
+            }
 
-        let scoresList = document.getElementById('scoresList');
-    
-
-        if (!scoresList) {
-            scoresList = document.createElement('ul');
-            scoresList.id = 'scoresList';
-            document.getElementById('mainContainer').appendChild(scoresList);
-        }
-    
-
-        scoresList.innerHTML = '';
-        this.scores.forEach((score, index) => {
-            const li = document.createElement('li');
-            li.textContent = `Rekord ${index + 1}: ${score} sekund`;
-            scoresList.appendChild(li);
+            const accelerationX = (event.gamma - this.initialDeviceGamma) / 100;
+            const accelerationY = (event.beta - this.initialDeviceBeta) / 100;
+            
+            this.ball.setTiltAcceleration(accelerationX, accelerationY);
         });
-    
-        setTimeout(() => {
-            this.resetGame();
-        }, 1000);
+    }
+
+    setupWindowResizeHandler() {
+        window.addEventListener('resize', () => {
+            this.canvas.width = Math.min(window.innerWidth, 500);
+            this.canvas.height = Math.min(window.innerHeight, 400);
+            this.placeHoleRandomly();
+            this.ball.resetToRandomPosition(this.canvas.width, this.canvas.height);
+        });
+    }
+
+    startGameLoop() {
+        if (this.isGameFinished) return;
+
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.ball.updatePhysics(this.canvas.width, this.canvas.height);
+        
+        const dx = this.ball.x - this.hole.x;
+        const dy = this.ball.y - this.hole.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < this.hole.radius) {
+            this.handleHoleCollision();
+        }
+
+        this.hole.draw(this.context);
+        this.ball.draw(this.context);
+        this.updateScoreDisplay();
+
+        requestAnimationFrame(() => this.startGameLoop());
+    }
+
+    handleHoleCollision() {
+        const timeElapsed = Date.now() - this.attemptStartTime;
+        this.addScoreRecord(timeElapsed);
+        
+        this.score += 1;
+        
+        if (this.hole.radius > 25) {
+            this.hole.radius -= 1;
+        }
+        this.placeHoleRandomly();
+        this.attemptStartTime = Date.now();
+       
     }
 
     
-    
-
-    // TODO extract to separate helpers class
-    //not finished
-    getRandom(min, max) {
-        return Math.floor(Math.random() * (max - min) + min)
-    }
-
-    resetGame() {
-        this.gameObjSetup();
-        this.startTime = new Date();
-        this.runGameTick();
-    }
 }
+
 
 
